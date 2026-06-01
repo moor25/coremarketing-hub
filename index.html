@@ -806,6 +806,7 @@ function doLogin() {
 
 function doLogout() {
   sessionStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem("smma_auth");
   document.getElementById("app").style.display = "none";
   document.getElementById("login-screen").style.display = "flex";
   document.getElementById("username").value = "";
@@ -837,18 +838,14 @@ function switchTab(tab) {
   if (vbNav) vbNav.style.display = tab === "vb" ? "flex" : "none";
   if (vbProg) vbProg.style.display = tab === "vb" ? "block" : "none";
 
-  // Load SMMA automator iframe on first open, inject auth so no second login needed
+  // SMMA: localStorage-ba írjuk az auth-ot MIELŐTT az iframe betölt,
+  // mert sessionStorage-t a React már olvasta a mount-kor
   if (tab === "smma") {
+    const role = sessionStorage.getItem(SESSION_KEY);
+    localStorage.setItem("smma_auth", role);
     const frame = document.getElementById("smma-frame");
-    if (!frame.src || frame.src === window.location.href) {
+    if (!frame.src || frame.src === window.location.href || frame.src === "") {
       frame.src = "./smma/index.html";
-      frame.addEventListener("load", function injectAuth() {
-        try {
-          const role = sessionStorage.getItem(SESSION_KEY);
-          frame.contentWindow.sessionStorage.setItem("smma_auth", role);
-        } catch(e) {}
-        frame.removeEventListener("load", injectAuth);
-      });
     }
   }
 
