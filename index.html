@@ -308,6 +308,34 @@ body { font-family: 'DM Sans', sans-serif; background: #0c0c14; color: #e2e8f0; 
   }
 }
 .mobile-menu-btn { display: none; }
+
+/* ── ROLE-BASED ── */
+.admin-only { display: none; }
+body.role-admin .admin-only { display: flex; }
+
+/* ── PRESENT MODE ── */
+body.present-mode .sidebar { display: none; }
+body.present-mode .main { margin-left: 0; }
+body.present-mode #vb-nav { left: 50% !important; transform: translateX(-50%) !important; }
+body.present-mode .vb-progress { left: 0 !important; width: var(--vb-pct, 0%) !important; }
+.present-btn {
+  position: fixed; top: 16px; right: 16px; z-index: 500;
+  background: rgba(13,17,32,0.85); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px; padding: 8px 14px; font-size: 12px;
+  color: #64748b; cursor: pointer; backdrop-filter: blur(10px);
+  transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+  display: flex; align-items: center; gap: 6px;
+}
+.present-btn:hover { color: #e2e8f0; border-color: rgba(255,255,255,0.2); }
+.present-close-btn {
+  position: fixed; top: 16px; right: 16px; z-index: 500;
+  background: rgba(244,63,94,0.15); border: 1px solid rgba(244,63,94,0.3);
+  border-radius: 10px; padding: 8px 14px; font-size: 12px;
+  color: #f43f5e; cursor: pointer; backdrop-filter: blur(10px);
+  font-family: 'DM Sans', sans-serif; display: none;
+}
+body.present-mode .present-close-btn { display: flex; align-items: center; gap: 6px; }
+body.present-mode .present-btn { display: none; }
 </style>
 </head>
 <body>
@@ -342,11 +370,11 @@ body { font-family: 'DM Sans', sans-serif; background: #0c0c14; color: #e2e8f0; 
       <div class="sidebar-logo-sub">RENDSZER HUB</div>
     </div>
     <nav class="sidebar-nav">
-      <button class="nav-item active" onclick="switchTab('vb')" id="nav-vb">
+      <button class="nav-item admin-only" onclick="switchTab('vb')" id="nav-vb">
         <span class="nav-item-icon">📊</span>
         Vision Board
       </button>
-      <button class="nav-item" onclick="switchTab('ms')" id="nav-ms">
+      <button class="nav-item admin-only" onclick="switchTab('ms')" id="nav-ms">
         <span class="nav-item-icon">📋</span>
         Meeting Script
         <span class="nav-badge">HAMAROSAN</span>
@@ -367,6 +395,10 @@ body { font-family: 'DM Sans', sans-serif; background: #0c0c14; color: #e2e8f0; 
       </button>
     </div>
   </div>
+
+  <!-- Prezentáció gombok (admin-only) -->
+  <button class="present-btn admin-only" id="present-btn" onclick="enterPresent()">⛶ Prezentáció mód</button>
+  <button class="present-close-btn" id="present-close-btn" onclick="exitPresent()">✕ Kilépés</button>
 
   <!-- MAIN CONTENT -->
   <div class="main">
@@ -793,7 +825,7 @@ function doLogin() {
     sessionStorage.setItem(SESSION_KEY, user.role);
     document.getElementById("login-screen").style.display = "none";
     document.getElementById("app").style.display = "block";
-    initVisionBoard();
+    applyRole(user.role);
   } else {
     inputs.forEach(i => i.classList.add("error"));
     errEl.classList.add("show");
@@ -813,11 +845,44 @@ function doLogout() {
   document.getElementById("password").value = "";
 }
 
+function applyRole(role) {
+  if (role === "admin") {
+    document.body.classList.add("role-admin");
+    initVisionBoard();
+    switchTab("vb");
+  } else {
+    document.body.classList.remove("role-admin");
+    switchTab("smma");
+  }
+}
+
+function enterPresent() {
+  document.body.classList.add("present-mode");
+  // Csak VB és MS tabokon értelmes
+  const activeTab = document.querySelector(".tab-panel.active");
+  if (activeTab && activeTab.id === "tab-vb") {
+    // Progress bar újraigazítása
+    vbUpdateUI();
+  }
+}
+
+function exitPresent() {
+  document.body.classList.remove("present-mode");
+  vbUpdateUI();
+}
+
+// Prezentáció gomb csak VB és MS tabokon látható
+function updatePresentBtn(tab) {
+  const btn = document.getElementById("present-btn");
+  if (btn) btn.style.display = (tab === "vb" || tab === "ms") ? "" : "none";
+}
+
 // Check existing session
-if (sessionStorage.getItem(SESSION_KEY)) {
+const existingRole = sessionStorage.getItem(SESSION_KEY);
+if (existingRole) {
   document.getElementById("login-screen").style.display = "none";
   document.getElementById("app").style.display = "block";
-  initVisionBoard();
+  applyRole(existingRole);
 }
 
 document.getElementById("username").addEventListener("keydown", e => { if(e.key === "Enter") document.getElementById("password").focus(); });
@@ -848,6 +913,8 @@ function switchTab(tab) {
       frame.src = "./smma/index.html";
     }
   }
+
+  updatePresentBtn(tab);
 
   if (window.innerWidth <= 768) {
     document.getElementById("sidebar").classList.remove("open");
