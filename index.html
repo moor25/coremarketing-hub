@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CoreMarketing – Rendszer Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & BASE ── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'DM Sans', sans-serif; background: #0c0c14; color: #e2e8f0; min-height: 100vh; }
+
+/* ═══════════════════════════
+   LOGIN SCREEN
+═══════════════════════════ */
+#login-screen {
+  min-height: 100vh; display: flex;
+  align-items: center; justify-content: center; padding: 16px;
+  background: #0c0c14;
+}
+.login-card {
+  background: #13131a; border: 1px solid #1e1e2e; border-radius: 20px;
+  padding: 40px 32px; width: 100%; max-width: 360px; text-align: center;
+}
+.login-icon {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px; font-size: 22px;
+}
+.login-title {
+  font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800;
+  color: #e2e8f0; margin: 0 0 6px;
+}
+.login-sub { color: #64748b; font-size: 13px; margin: 0 0 28px; }
+.login-input {
+  width: 100%; background: #0c0c14;
+  border: 1px solid #1e1e2e; border-radius: 10px;
+  padding: 12px 14px; color: #e2e8f0; font-size: 14px;
+  outline: none; margin-bottom: 12px; transition: border-color 0.2s;
+  font-family: 'DM Sans', sans-serif;
+}
+.login-input:focus { border-color: #6366f1; }
+.login-input.error { border-color: #ef4444; }
+.login-error { color: #ef4444; font-size: 12px; margin: 0 0 12px; display: none; }
+.login-error.show { display: block; }
+.login-btn {
+  width: 100%; background: #6366f1; color: #fff; border: none;
+  border-radius: 10px; padding: 12px; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: background 0.2s; font-family: 'DM Sans', sans-serif;
+}
+.login-btn:hover { background: #4f51d4; }
+
+/* ═══════════════════════════
+   HUB APP
+═══════════════════════════ */
+#app { display: none; min-height: 100vh; }
+
+/* Sidebar */
+.sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0; width: 240px;
+  background: #0f0f1a; border-right: 1px solid rgba(255,255,255,0.06);
+  display: flex; flex-direction: column; z-index: 100; padding: 28px 0 20px;
+}
+.sidebar-logo {
+  padding: 0 24px 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.sidebar-logo-title {
+  font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800;
+  color: #e2e8f0; letter-spacing: 0.5px;
+}
+.sidebar-logo-sub { font-size: 11px; color: #475569; margin-top: 3px; letter-spacing: 1px; }
+
+.sidebar-nav { flex: 1; padding: 20px 12px; display: flex; flex-direction: column; gap: 4px; }
+.nav-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; border-radius: 10px; cursor: pointer;
+  transition: background 0.2s, color 0.2s; color: #64748b;
+  font-size: 14px; font-weight: 500; border: none; background: none;
+  width: 100%; text-align: left; position: relative;
+}
+.nav-item:hover { background: rgba(255,255,255,0.04); color: #94a3b8; }
+.nav-item.active { background: rgba(99,102,241,0.12); color: #818cf8; }
+.nav-item-icon { font-size: 18px; flex-shrink: 0; }
+.nav-badge {
+  margin-left: auto; font-size: 9px; font-family: 'Syne', sans-serif;
+  letter-spacing: 1px; padding: 2px 7px; border-radius: 10px;
+  background: rgba(100,116,139,0.2); color: #475569;
+}
+
+.sidebar-footer {
+  padding: 16px 12px 0; border-top: 1px solid rgba(255,255,255,0.06);
+}
+.logout-btn {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 9px 12px; border-radius: 10px;
+  background: none; border: none; color: #475569; font-size: 13px;
+  cursor: pointer; transition: color 0.2s; font-family: 'DM Sans', sans-serif;
+}
+.logout-btn:hover { color: #94a3b8; }
+
+/* Main content */
+.main {
+  margin-left: 240px; min-height: 100vh;
+  background: #050810;
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ═══════════════════════════
+   PLACEHOLDER PANELS
+═══════════════════════════ */
+.placeholder-wrap {
+  min-height: 100vh; display: flex; align-items: center;
+  justify-content: center; padding: 48px 40px;
+}
+.placeholder-card {
+  max-width: 540px; width: 100%; text-align: center;
+}
+.placeholder-icon { font-size: 56px; margin-bottom: 24px; }
+.placeholder-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 14px; border-radius: 20px; font-size: 11px;
+  font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; margin-bottom: 20px;
+  border: 1px solid rgba(251,191,36,0.3); background: rgba(251,191,36,0.06);
+  color: #fbbf24;
+}
+.placeholder-title {
+  font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800;
+  color: #e2e8f0; margin-bottom: 14px; line-height: 1.2;
+}
+.placeholder-desc { font-size: 15px; color: #64748b; line-height: 1.7; margin-bottom: 32px; }
+.placeholder-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 0 auto 32px; max-width: 200px; }
+.placeholder-items { display: flex; flex-direction: column; gap: 12px; text-align: left; }
+.placeholder-item {
+  display: flex; gap: 14px; align-items: flex-start;
+  background: #0f0f1a; border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px; padding: 14px 18px;
+}
+.placeholder-item-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.placeholder-item-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; color: #cbd5e1; margin-bottom: 3px; }
+.placeholder-item-desc { font-size: 13px; color: #475569; line-height: 1.5; }
+
+/* ═══════════════════════════
+   VISION BOARD EMBED
+   (slides system, copied inline)
+═══════════════════════════ */
+#vb-root {
+  position: relative; min-height: 100vh;
+  background: #050810;
+  --bg: #050810; --panel: #0d1120; --panel2: #111827;
+  --border: rgba(255,255,255,0.07); --accent: #4f8ef7;
+  --accent2: #a78bfa; --orange: #f97316; --green: #22d3a8;
+  --red: #f43f5e; --yellow: #fbbf24; --text: #f1f5f9;
+  --muted: #64748b; --card-glow: 0 0 40px rgba(79,142,247,0.08);
+  font-family: 'DM Sans', sans-serif; color: var(--text);
+}
+#vb-root .slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateX(40px);
+  overflow-y: auto; min-height: 100vh;
+}
+#vb-root .slide.active {
+  opacity: 1; pointer-events: all; transform: translateX(0);
+  position: relative;
+}
+#vb-root .slide.exit { opacity: 0; transform: translateX(-40px); }
+
+#vb-root nav {
+  position: fixed; bottom: 32px; left: calc(240px + 50%);
+  transform: translateX(-50%);
+  z-index: 200; display: flex; align-items: center; gap: 12px;
+  background: rgba(13,17,32,0.9); border: 1px solid var(--border);
+  border-radius: 50px; padding: 10px 20px;
+  backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+#vb-root nav button {
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: 18px; padding: 4px 8px; transition: color .2s;
+}
+#vb-root nav button:hover { color: var(--text); }
+.vb-nav-dots { display: flex; gap: 6px; }
+.vb-nav-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--muted); cursor: pointer;
+  transition: background .3s, transform .3s; border: none;
+}
+.vb-nav-dot.active { background: var(--accent); transform: scale(1.4); }
+.vb-counter {
+  font-family: 'Syne', sans-serif; font-size: 11px;
+  color: var(--muted); letter-spacing: 2px; min-width: 40px; text-align: center;
+}
+.vb-progress {
+  position: fixed; top: 0; left: 240px; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transition: width 0.5s ease; z-index: 300; width: 0;
+}
+
+/* Vision board content styles */
+#vb-root .slide-inner {
+  max-width: 1100px; width: 100%; margin: 0 auto;
+  padding: 60px 48px 120px; flex: 1;
+}
+#vb-root .slide-label {
+  font-family: 'Syne', sans-serif; font-size: 11px; letter-spacing: 3px;
+  color: var(--accent); text-transform: uppercase; margin-bottom: 16px;
+}
+#vb-root h1 {
+  font-family: 'Syne', sans-serif; font-size: clamp(36px,5vw,64px);
+  font-weight: 800; line-height: 1.05; margin-bottom: 20px;
+}
+#vb-root h2 {
+  font-family: 'Syne', sans-serif; font-size: clamp(26px,3.5vw,44px);
+  font-weight: 700; line-height: 1.1; margin-bottom: 16px;
+}
+#vb-root h3 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+#vb-root p { font-size: 16px; line-height: 1.7; color: #94a3b8; }
+#vb-root .accent { color: var(--accent); }
+#vb-root .accent2 { color: var(--accent2); }
+#vb-root .orange { color: var(--orange); }
+#vb-root .green { color: var(--green); }
+#vb-root .red { color: var(--red); }
+#vb-root .grad { background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+#vb-root .card {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 16px; padding: 24px 28px; box-shadow: var(--card-glow);
+}
+#vb-root .card-grid { display: grid; gap: 16px; }
+#vb-root .card-grid-2 { grid-template-columns: 1fr 1fr; }
+#vb-root .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+#vb-root .badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px; border-radius: 20px; font-size: 12px;
+  font-family: 'Syne', sans-serif; font-weight: 600; letter-spacing: 0.5px; border: 1px solid;
+}
+#vb-root .badge-blue { color: var(--accent); border-color: rgba(79,142,247,0.3); background: rgba(79,142,247,0.07); }
+#vb-root .badge-purple { color: var(--accent2); border-color: rgba(167,139,250,0.3); background: rgba(167,139,250,0.07); }
+#vb-root .badge-orange { color: var(--orange); border-color: rgba(249,115,22,0.3); background: rgba(249,115,22,0.07); }
+#vb-root .badge-green { color: var(--green); border-color: rgba(34,211,168,0.3); background: rgba(34,211,168,0.07); }
+#vb-root .divider { height: 1px; background: var(--border); margin: 28px 0; }
+#vb-root .big-quote {
+  border-left: 3px solid var(--accent); padding: 16px 24px;
+  background: rgba(79,142,247,0.04); border-radius: 0 12px 12px 0;
+}
+#vb-root .big-quote p { font-size: 18px; color: var(--text); font-style: italic; line-height: 1.6; }
+#vb-root .arrow-flow { display: flex; align-items: center; gap: 0; flex-wrap: wrap; row-gap: 16px; }
+#vb-root .flow-node {
+  background: var(--panel2); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px 18px; min-width: 130px; text-align: center; flex-shrink: 0;
+}
+#vb-root .flow-node-icon { font-size: 22px; margin-bottom: 6px; }
+#vb-root .flow-node-label { font-size: 12px; font-family: 'Syne', sans-serif; font-weight: 600; }
+#vb-root .flow-node-sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
+#vb-root .flow-arrow { font-size: 20px; color: var(--accent); padding: 0 6px; flex-shrink: 0; }
+#vb-root .flow-node.highlight-node {
+  border-color: rgba(79,142,247,0.5); background: rgba(79,142,247,0.06);
+  box-shadow: 0 0 20px rgba(79,142,247,0.15);
+}
+#vb-root .check-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+#vb-root .check-list li {
+  display: flex; gap: 10px; align-items: flex-start;
+  font-size: 15px; color: #cbd5e1; line-height: 1.5;
+}
+#vb-root .check-list li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+#vb-root .icon-circle {
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;
+}
+#vb-root .score-bar-wrap { margin: 8px 0; }
+#vb-root .score-bar-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; }
+#vb-root .score-bar-track { height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; }
+#vb-root .score-bar-fill { height: 100%; border-radius: 4px; animation: fillBar 1.2s ease forwards; }
+@keyframes fillBar { from { width: 0; } }
+@keyframes pulse { 0%,100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.08); } }
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:0.3} }
+
+/* Slide backgrounds */
+#vb-s2 { background: radial-gradient(ellipse 60% 50% at 80% 50%, rgba(249,115,22,0.06) 0%, transparent 70%), var(--bg); }
+#vb-s3 { background: radial-gradient(ellipse 60% 50% at 10% 60%, rgba(167,139,250,0.08) 0%, transparent 70%), var(--bg); }
+#vb-s4 { background: radial-gradient(ellipse 70% 60% at 50% 20%, rgba(34,211,168,0.07) 0%, transparent 70%), var(--bg); }
+#vb-s4b { background: radial-gradient(ellipse 60% 50% at 80% 40%, rgba(249,115,22,0.07) 0%, transparent 70%), var(--bg); }
+#vb-s9 { background: radial-gradient(ellipse 70% 60% at 60% 30%, rgba(251,191,36,0.08) 0%, transparent 70%), var(--bg); }
+#vb-s10 { background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(79,142,247,0.1) 0%, transparent 70%), var(--bg); }
+
+/* Mobile */
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; }
+  #vb-root nav { left: 50%; }
+  .vb-progress { left: 0; }
+  #vb-root .card-grid-2, #vb-root .card-grid-3 { grid-template-columns: 1fr; }
+  #vb-root .slide-inner { padding: 40px 24px 120px; }
+  #vb-root .arrow-flow { flex-direction: column; align-items: flex-start; }
+  #vb-root .flow-arrow { transform: rotate(90deg); }
+  .mobile-menu-btn {
+    display: flex !important;
+    position: fixed; top: 16px; left: 16px; z-index: 500;
+    width: 40px; height: 40px; border-radius: 10px;
+    background: #13131a; border: 1px solid #1e1e2e;
+    align-items: center; justify-content: center;
+    font-size: 18px; cursor: pointer; color: #e2e8f0;
+  }
+}
+.mobile-menu-btn { display: none; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- LOGIN SCREEN -->
+<!-- ═══════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-icon">🔒</div>
+    <h2 class="login-title">CORE Marketing</h2>
+    <p class="login-sub">Belépés a rendszer hubba</p>
+    <input id="username" type="text" class="login-input" placeholder="Felhasználónév" autocomplete="username">
+    <input id="password" type="password" class="login-input" placeholder="Jelszó" autocomplete="current-password">
+    <p id="login-error" class="login-error">Helytelen felhasználónév vagy jelszó</p>
+    <button class="login-btn" onclick="doLogin()">Belépés →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- HUB APP -->
+<!-- ═══════════════════════════════════════ -->
+<div id="app">
+
+  <!-- Mobile menu button -->
+  <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleSidebar()">☰</button>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-title">CORE Marketing</div>
+      <div class="sidebar-logo-sub">RENDSZER HUB</div>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" onclick="switchTab('vb')" id="nav-vb">
+        <span class="nav-item-icon">📊</span>
+        Vision Board
+      </button>
+      <button class="nav-item" onclick="switchTab('ms')" id="nav-ms">
+        <span class="nav-item-icon">📋</span>
+        Meeting Script
+        <span class="nav-badge">HAMAROSAN</span>
+      </button>
+      <button class="nav-item" onclick="switchTab('cc')" id="nav-cc">
+        <span class="nav-item-icon">📞</span>
+        Cold Call Script
+        <span class="nav-badge">HAMAROSAN</span>
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" onclick="doLogout()">
+        <span>🚪</span> Kilépés
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+
+    <!-- ── TAB: VISION BOARD ── -->
+    <div class="tab-panel active" id="tab-vb">
+      <div id="vb-root">
+        <!-- Progress bar (vision board only) -->
+        <div class="vb-progress" id="vb-progress"></div>
+
+        <!-- SLIDE 1 – A rendszer -->
+        <div class="slide active" id="vb-s2">
+          <div class="slide-inner">
+            <div class="slide-label">01 · A rendszer</div>
+            <h2>Így működik a<br><span class="orange">CoreMarketing</span> lead-generáló rendszer</h2>
+            <p style="margin-bottom:36px;">Minden lépés egymásra épül — az első felmérőtől a kész érdeklődőig.</p>
+            <div class="arrow-flow">
+              <div class="flow-node">
+                <div class="flow-node-icon">📋</div>
+                <div class="flow-node-label">Ideális ügyfélprofil</div>
+                <div class="flow-node-sub">Részletes felmérő kitöltése</div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node highlight-node">
+                <div class="flow-node-icon">🧠</div>
+                <div class="flow-node-label">AdMind™ előszűrés</div>
+                <div class="flow-node-sub">AI-alapú kreatív validáció</div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node">
+                <div class="flow-node-icon">📣</div>
+                <div class="flow-node-label">Facebook kampány</div>
+                <div class="flow-node-sub">Több variáció, A/B tesztelés</div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node">
+                <div class="flow-node-icon">📝</div>
+                <div class="flow-node-label">Kvalifikáló űrlap</div>
+                <div class="flow-node-sub">Személyre szabott kérdések</div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node" style="border-color:rgba(34,211,168,0.4); background:rgba(34,211,168,0.05);">
+                <div class="flow-node-icon">📞</div>
+                <div class="flow-node-label">Kész érdeklődő</div>
+                <div class="flow-node-sub">Neked adjuk át</div>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div class="big-quote">
+              <p>Nem hideg megkeresés, nem véletlen kattintó.<br>
+              <strong style="color:#f1f5f9;">Olyan érdeklődő, aki kitöltötte az űrlapot, megadta az adatait — és várja, hogy felhívják.</strong></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 2 – Ügyfél felmérő -->
+        <div class="slide" id="vb-s3">
+          <div class="slide-inner">
+            <div class="slide-label">02 · Az alapja mindennek</div>
+            <h2>Ideális ügyfélprofil<br><span class="accent2">felmérő</span></h2>
+            <p style="margin-bottom:32px;">Mielőtt bármi elindul, részletesen feltérképezzük a vállalkozásodat — ez alapján lesz személyre szabva minden: a hirdetés szövege, képi világa és az érdeklődők szűrésének módja is.</p>
+            <div class="card-grid card-grid-2">
+              <div class="card">
+                <div style="display:flex; gap:14px; align-items:flex-start;">
+                  <div class="icon-circle" style="background:rgba(167,139,250,0.1);">🏢</div>
+                  <div>
+                    <h3>Vállalkozás & pozicionálás</h3>
+                    <ul class="check-list" style="margin-top:8px;">
+                      <li>Iparág, tevékenységi kör</li>
+                      <li>Melyik szolgáltatásod a legjobb? Miért?</li>
+                      <li>Miben vagy jobb a versenytársaidnál?</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div style="display:flex; gap:14px; align-items:flex-start;">
+                  <div class="icon-circle" style="background:rgba(249,115,22,0.1);">🎯</div>
+                  <div>
+                    <h3>Ideális ügyfélprofil</h3>
+                    <ul class="check-list" style="margin-top:8px;">
+                      <li>Kor, nem, célterület (város + vonzáskörzet)</li>
+                      <li>Döntési szempontok: ár, minőség, garancia, személyes szimpátia</li>
+                      <li>Kikkel nem érdemes együttdolgozni</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div style="display:flex; gap:14px; align-items:flex-start;">
+                  <div class="icon-circle" style="background:rgba(34,211,168,0.1);">💬</div>
+                  <div>
+                    <h3>Értékesítési folyamat</h3>
+                    <ul class="check-list" style="margin-top:8px;">
+                      <li>Átlagos döntési idő az első kapcsolatfelvételtől</li>
+                      <li>Milyen kérdéseket kell feltétlenül tisztázni az érdeklődővel</li>
+                      <li>Visszatérő ügyfelek és ajánlások aránya</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="card" style="border-color:rgba(79,142,247,0.3); background:rgba(79,142,247,0.04);">
+                <div style="display:flex; gap:14px; align-items:flex-start;">
+                  <div class="icon-circle" style="background:rgba(79,142,247,0.15);">⚡</div>
+                  <div>
+                    <h3>Mit ad ez nekünk?</h3>
+                    <p style="font-size:14px; margin-top:6px;">20+ kérdés alapján pontosan tudjuk,
+                    <strong style="color:#f1f5f9;">milyen kreatív kommunikáció működik</strong> a te célcsoportodnál —
+                    és az AdMind™ validálja, mielőtt egyetlen forint is elmegy rá.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 3 – AdMind -->
+        <div class="slide" id="vb-s4">
+          <div class="slide-inner">
+            <div class="slide-label">03 · Kreatív validáció</div>
+            <h2><span class="accent">AdMind™</span> — AI-alapú előszűrés<br><span class="green">mielőtt a hirdetés elindul</span></h2>
+            <div style="display:flex; gap:40px; align-items:flex-start; flex-wrap:wrap; margin-top:28px;">
+              <div class="card" style="flex-shrink:0; padding:28px 24px; text-align:center; position:relative; overflow:hidden;">
+                <div style="font-family:'Syne',sans-serif; font-size:11px; letter-spacing:2px; color:#4f8ef7; margin-bottom:12px;">ADMIND™ NEURÁLIS MODELL</div>
+                <div style="position:relative; width:220px; height:200px; margin:0 auto;">
+                  <svg viewBox="0 0 220 200" width="220" height="200" style="position:absolute;top:0;left:0;">
+                    <ellipse cx="110" cy="95" rx="90" ry="75" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+                    <ellipse cx="110" cy="90" rx="70" ry="55" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.05)" stroke-width="1.5"/>
+                    <line x1="110" y1="35" x2="110" y2="155" stroke="rgba(255,255,255,0.08)" stroke-width="1.5" stroke-dasharray="4,3"/>
+                    <path d="M 55,70 Q 80,55 110,60 Q 140,55 165,70" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1.5"/>
+                    <path d="M 45,100 Q 70,85 100,90 Q 130,85 165,100" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1.5"/>
+                    <path d="M 55,125 Q 80,115 110,118 Q 140,115 165,125" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1.5"/>
+                  </svg>
+                  <div style="position:absolute; top:20px; left:50px; width:70px; height:55px; border-radius:50%; background:radial-gradient(circle, rgba(244,63,94,0.6) 0%, rgba(249,115,22,0.3) 50%, transparent 80%); animation:pulse 2s ease-in-out infinite;"></div>
+                  <div style="position:absolute; top:40px; right:30px; width:60px; height:50px; border-radius:50%; background:radial-gradient(circle, rgba(251,191,36,0.5) 0%, rgba(249,115,22,0.25) 50%, transparent 80%); animation:pulse 2.4s ease-in-out infinite 0.4s;"></div>
+                  <div style="position:absolute; top:90px; left:40px; width:55px; height:45px; border-radius:50%; background:radial-gradient(circle, rgba(79,142,247,0.5) 0%, rgba(167,139,250,0.25) 50%, transparent 80%); animation:pulse 2.8s ease-in-out infinite 0.8s;"></div>
+                  <div style="position:absolute; top:95px; right:35px; width:50px; height:40px; border-radius:50%; background:radial-gradient(circle, rgba(34,211,168,0.4) 0%, rgba(79,142,247,0.2) 50%, transparent 80%); animation:pulse 2.2s ease-in-out infinite 1.2s;"></div>
+                  <div style="position:absolute; top:130px; left:70px; width:80px; height:40px; border-radius:50%; background:radial-gradient(circle, rgba(249,115,22,0.35) 0%, rgba(251,191,36,0.15) 50%, transparent 80%); animation:pulse 3s ease-in-out infinite 0.6s;"></div>
+                  <div style="position:absolute; top:16px; left:12px; font-size:9px; color:rgba(244,63,94,0.9); font-family:'Syne',sans-serif; letter-spacing:1px;">VIZUÁLIS<br>KÉREG</div>
+                  <div style="position:absolute; top:36px; right:4px; font-size:9px; color:rgba(251,191,36,0.9); font-family:'Syne',sans-serif; letter-spacing:1px; text-align:right;">AMYGDALA<br>ÉRZELEM</div>
+                  <div style="position:absolute; top:92px; left:2px; font-size:9px; color:rgba(79,142,247,0.9); font-family:'Syne',sans-serif; letter-spacing:1px;">FIGYELEM</div>
+                  <div style="position:absolute; top:98px; right:2px; font-size:9px; color:rgba(34,211,168,0.9); font-family:'Syne',sans-serif; letter-spacing:1px; text-align:right;">MEMÓRIA</div>
+                </div>
+                <div style="margin-top:16px; display:flex; flex-direction:column; gap:6px; align-items:center;">
+                  <div class="badge badge-green">🔴 Piros = erős aktiváció</div>
+                  <div style="display:inline-flex; align-items:center; gap:6px; margin-top:4px;">
+                    <span style="font-size:11px; color:#64748b; font-family:'Syne',sans-serif; letter-spacing:1px;">POWERED BY</span>
+                    <span style="font-size:12px; color:#4f8ef7; font-family:'Syne',sans-serif; font-weight:700; letter-spacing:1px;">HIGGSFIELD AI</span>
+                  </div>
+                </div>
+              </div>
+              <div style="flex:1; min-width:260px;">
+                <div class="card" style="margin-bottom:16px;">
+                  <h3 style="margin-bottom:16px;">Mit mér az AdMind™?</h3>
+                  <div class="score-bar-wrap">
+                    <div class="score-bar-label"><span>🎯 Hook Strength</span><span style="color:#4f8ef7;">87/100</span></div>
+                    <div class="score-bar-track"><div class="score-bar-fill" style="width:87%; background:linear-gradient(90deg,#4f8ef7,#a78bfa);"></div></div>
+                    <p style="font-size:12px; margin-top:4px;">Megállítja-e a scrollt az első másodpercben</p>
+                  </div>
+                  <div class="score-bar-wrap" style="margin-top:14px;">
+                    <div class="score-bar-label"><span>⏱ Hold Rate</span><span style="color:#22d3a8;">73%</span></div>
+                    <div class="score-bar-track"><div class="score-bar-fill" style="width:73%; background:linear-gradient(90deg,#22d3a8,#22d3a8aa);"></div></div>
+                    <p style="font-size:12px; margin-top:4px;">Végig megtartja-e a néző figyelmét</p>
+                  </div>
+                  <div class="score-bar-wrap" style="margin-top:14px;">
+                    <div class="score-bar-label"><span>🔥 Virality Score</span><span style="color:#f97316;">91/100</span></div>
+                    <div class="score-bar-track"><div class="score-bar-fill" style="width:91%; background:linear-gradient(90deg,#f97316,#fbbf24);"></div></div>
+                    <p style="font-size:12px; margin-top:4px;">A kreatív összesített teljesítménypotenciálja</p>
+                  </div>
+                </div>
+                <div class="card" style="border-color:rgba(79,142,247,0.3); background:rgba(79,142,247,0.04);">
+                  <h3 style="color:#4f8ef7; margin-bottom:8px;">🤝 Hogyan működik?</h3>
+                  <p style="font-size:14px; margin-bottom:12px;">Az <strong style="color:#f1f5f9;">AdMind™</strong> a Higgsfield AI neurális modelljére épül — feltöltjük a hirdetésképet, és a rendszer előre megmondja, hogyan reagál rá az emberi agy:</p>
+                  <div style="display:flex; flex-direction:column; gap:8px;">
+                    <div style="display:flex; gap:10px; align-items:flex-start; font-size:13px; color:#cbd5e1;"><span style="color:#4f8ef7; flex-shrink:0; margin-top:1px;">01</span><span>Szimulálja a szemmozgást — <strong style="color:#f1f5f9;">hova fókuszál először a tekintet</strong></span></div>
+                    <div style="display:flex; gap:10px; align-items:flex-start; font-size:13px; color:#cbd5e1;"><span style="color:#4f8ef7; flex-shrink:0; margin-top:1px;">02</span><span>Méri az érzelmi aktivációt — <strong style="color:#f1f5f9;">kivált-e reakciót a kép</strong></span></div>
+                    <div style="display:flex; gap:10px; align-items:flex-start; font-size:13px; color:#cbd5e1;"><span style="color:#4f8ef7; flex-shrink:0; margin-top:1px;">03</span><span>Megmondja a Hook Strength-et — <strong style="color:#f1f5f9;">megállítja-e a scrollt</strong></span></div>
+                    <div style="display:flex; gap:10px; align-items:flex-start; font-size:13px; color:#cbd5e1;"><span style="color:#4f8ef7; flex-shrink:0; margin-top:1px;">04</span><span>Visszaad egy <strong style="color:#f1f5f9;">agyi hőtérképet</strong> — vizuálisan jelöli az aktivációs pontokat</span></div>
+                  </div>
+                  <div style="margin-top:12px; padding:10px 14px; border-radius:8px; background:rgba(34,211,168,0.06); border:1px solid rgba(34,211,168,0.2);">
+                    <p style="font-size:13px; color:#22d3a8;">Gyenge score = nem fut ki a hirdetés. Csak a validált kreatívok kerülnek kampányba.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 4 – Kampány & Érdeklődőszerzés -->
+        <div class="slide" id="vb-s4b">
+          <div class="slide-inner">
+            <div class="slide-label">04 · Kampány & Érdeklődőszerzés</div>
+            <h2>Hirdetés, ami nemcsak<br><span class="accent">kattintást hoz — hanem kvalifikált érdeklődőt</span></h2>
+            <div style="display:flex; gap:28px; flex-wrap:wrap; margin-top:32px; align-items:flex-start;">
+              <div style="flex:1; min-width:280px; display:flex; flex-direction:column; gap:14px;">
+                <div class="card" style="border-color:rgba(249,115,22,0.3); background:rgba(249,115,22,0.04);">
+                  <div style="display:flex; gap:14px; align-items:flex-start;">
+                    <div class="icon-circle" style="background:rgba(249,115,22,0.12); font-size:20px;">📣</div>
+                    <div><h3>Facebook kampány</h3><p style="font-size:14px; margin-top:4px;">Több kreatív variációt futtatunk párhuzamosan — az algoritmus azonosítja a legjobb teljesítményű hirdetést, azt skálázzuk.</p></div>
+                  </div>
+                </div>
+                <div style="display:flex; justify-content:center;"><div style="font-size:22px; color:#4f8ef7; opacity:0.5;">↓</div></div>
+                <div class="card" style="border-color:rgba(167,139,250,0.3); background:rgba(167,139,250,0.04);">
+                  <div style="display:flex; gap:14px; align-items:flex-start;">
+                    <div class="icon-circle" style="background:rgba(167,139,250,0.12); font-size:20px;">📝</div>
+                    <div><h3>Kvalifikáló érdeklődői űrlap</h3><p style="font-size:14px; margin-top:4px;">A kattintás után az érdeklődő nem csak nevet és telefonszámot ad meg — az ideális ügyfélprofil alapján összeállított kérdéseket tölt ki.</p></div>
+                  </div>
+                </div>
+                <div style="display:flex; justify-content:center;"><div style="font-size:22px; color:#4f8ef7; opacity:0.5;">↓</div></div>
+                <div class="card" style="border-color:rgba(34,211,168,0.3); background:rgba(34,211,168,0.04);">
+                  <div style="display:flex; gap:14px; align-items:flex-start;">
+                    <div class="icon-circle" style="background:rgba(34,211,168,0.12); font-size:20px;">📞</div>
+                    <div><h3>Kész érdeklődő — átadjuk neked</h3><p style="font-size:14px; margin-top:4px;">Megkapod a nevét, elérhetőségét és a válaszait. Tudod, kivel fogsz beszélni — ő pedig várja a hívást.</p></div>
+                  </div>
+                </div>
+              </div>
+              <div style="flex:1; min-width:280px;">
+                <div class="card" style="border-color:rgba(79,142,247,0.4); background:rgba(79,142,247,0.05); padding:24px;">
+                  <h3 style="color:#4f8ef7; margin-bottom:14px;">🎯 Miért más ez a többi hirdetésnél?</h3>
+                  <p style="font-size:14px; margin-bottom:14px;">A legtöbb hirdetésnél az érdeklődő csak nevet és telefonszámot hagy — aztán kiderül, hogy csak nézelődött, vagy nem is a célcsoportba tartozik.</p>
+                  <p style="font-size:14px;">Az első lépésben kitöltött ideális ügyfélprofil alapján <strong style="color:#f1f5f9;">személyre szabjuk a kvalifikáló kérdéseket</strong> — így mire felhívod, már pontosan tudod kivel és miről fogsz tárgyalni.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 5 – Árazás -->
+        <div class="slide" id="vb-s9">
+          <div class="slide-inner">
+            <div class="slide-label">05 · Befektetés</div>
+            <h2>Átlátható <span class="accent">árazás</span></h2>
+            <div style="max-width:560px; margin-top:32px;">
+              <div class="card" style="padding:0; overflow:hidden;">
+                <div style="background:rgba(79,142,247,0.08); padding:24px 28px; border-bottom:1px solid rgba(255,255,255,0.07);">
+                  <div class="badge badge-blue" style="margin-bottom:12px;">Havi kezelési díj</div>
+                  <div style="margin-top:4px;">
+                    <span id="vb-price-display" style="font-family:'Syne',sans-serif; font-size:52px; font-weight:800; color:#f1f5f9; line-height:1; cursor:pointer;" title="Kattints a szerkesztéshez">149 000</span><span style="font-family:'Syne',sans-serif; font-size:24px; font-weight:600; color:#64748b;"> Ft</span>
+                    <input id="vb-price-input" type="number" value="149000" style="display:none; font-family:'Syne',sans-serif; font-size:36px; font-weight:800; background:transparent; border:none; border-bottom:2px solid #4f8ef7; color:#f1f5f9; outline:none; width:180px;">
+                  </div>
+                  <p style="font-size:13px; color:#64748b; margin-top:10px;">/ hónap · Teljes rendszer + csapat</p>
+                </div>
+                <div style="padding:20px 28px;">
+                  <div style="font-family:'Syne',sans-serif; font-size:11px; letter-spacing:2px; color:#64748b; margin-bottom:14px;">TARTALMAZ</div>
+                  <ul class="check-list">
+                    <li>Ideális ügyfélprofil felmérő + kampánystratégia</li>
+                    <li>AdMind™ kreatív validáció minden hirdetésképre</li>
+                    <li>Facebook kampány felállítás és folyamatos kezelése</li>
+                    <li>Több kreatív variáció + A/B tesztelés</li>
+                    <li>Személyre szabott kvalifikáló érdeklődői űrlap</li>
+                    <li>Minősített érdeklődők adatainak átadása</li>
+                  </ul>
+                  <div style="margin-top:16px; padding:12px 16px; border-radius:10px; background:rgba(249,115,22,0.07); border:1px solid rgba(249,115,22,0.2);">
+                    <p style="font-size:13px; color:#f97316;">⚡ A hirdetési keret rugalmas — te határozod meg, mi a kampányt ahhoz optimalizáljuk.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 6 – Garancia -->
+        <div class="slide" id="vb-s10">
+          <div class="slide-inner" style="display:flex; flex-direction:column; justify-content:center; min-height:calc(100vh - 120px);">
+            <div style="text-align:center; margin-bottom:40px;">
+              <div style="font-size:64px; margin-bottom:16px;">🛡️</div>
+              <div class="badge badge-orange" style="margin:0 auto 16px; width:fit-content;">1. hónap garancia</div>
+              <h2 style="font-size:clamp(36px,5vw,60px);">Ha nem teljesítjük — <span style="color:#fbbf24;">visszatérítjük</span><br>a teljes kezelési díjat.</h2>
+              <p style="font-size:16px; color:#64748b; margin-top:16px; max-width:560px; margin-left:auto; margin-right:auto;">Annyira biztosak vagyunk a rendszerünkben, hogy az első hónapra teljes garanciát vállalunk — a garancia feltételei igazodnak a megállapodott hirdetési kerethez.</p>
+            </div>
+            <div style="max-width:560px; margin:0 auto; width:100%;">
+              <div class="card" style="border-color:rgba(251,191,36,0.4); background:rgba(251,191,36,0.04); padding:0; overflow:hidden;">
+                <div style="background:rgba(0,0,0,0.3); padding:20px 28px; display:flex; flex-direction:column; gap:0;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.06);">
+                    <span style="font-size:15px; color:#64748b;">Napi hirdetési keret <span style="font-size:12px; color:rgba(251,191,36,0.5);">(rugalmas)</span></span>
+                    <div style="display:flex; align-items:baseline; gap:4px;">
+                      <span id="vb-guar-budget-display" style="font-family:'Syne',sans-serif; font-size:20px; font-weight:700; color:#fbbf24; cursor:pointer;">5 000</span>
+                      <span style="font-size:13px; color:#64748b;">Ft / nap</span>
+                      <input id="vb-guar-budget-input" type="number" value="5000" style="display:none; font-family:'Syne',sans-serif; font-size:18px; font-weight:700; background:transparent; border:none; border-bottom:1px solid #fbbf24; color:#fbbf24; outline:none; width:80px; text-align:right;">
+                    </div>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.06);">
+                    <span style="font-size:15px; color:#64748b;">Garantált érdeklődők / hó</span>
+                    <div style="display:flex; align-items:baseline; gap:4px;">
+                      <span style="font-family:'Syne',sans-serif; font-size:20px; font-weight:700; color:#fbbf24;">min.</span>
+                      <span id="vb-guar-leads-display" style="font-family:'Syne',sans-serif; font-size:20px; font-weight:700; color:#fbbf24; cursor:pointer;">37</span>
+                      <span style="font-size:13px; color:#64748b;">db</span>
+                      <input id="vb-guar-leads-input" type="number" value="37" style="display:none; font-family:'Syne',sans-serif; font-size:18px; font-weight:700; background:transparent; border:none; border-bottom:1px solid #fbbf24; color:#fbbf24; outline:none; width:60px; text-align:right;">
+                    </div>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.06);">
+                    <span style="font-size:15px; color:#64748b;">Max. CPR — egy érdeklődő ára</span>
+                    <div style="display:flex; align-items:baseline; gap:4px;">
+                      <span id="vb-guar-cpr-display" style="font-family:'Syne',sans-serif; font-size:20px; font-weight:700; color:#fbbf24; cursor:pointer;">4 000</span>
+                      <span style="font-size:13px; color:#64748b;">Ft</span>
+                      <input id="vb-guar-cpr-input" type="number" value="4000" style="display:none; font-family:'Syne',sans-serif; font-size:18px; font-weight:700; background:transparent; border:none; border-bottom:1px solid #fbbf24; color:#fbbf24; outline:none; width:80px; text-align:right;">
+                    </div>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 0;">
+                    <span style="font-size:15px; color:#64748b;">Ha nem teljesül</span>
+                    <span style="font-family:'Syne',sans-serif; font-size:16px; font-weight:700; color:#f43f5e;">↩ 100% visszatérítés</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vision Board NAV -->
+        <nav id="vb-nav">
+          <button id="vb-prev">←</button>
+          <div class="vb-nav-dots" id="vb-dots"></div>
+          <div class="vb-counter" id="vb-counter">1 / 6</div>
+          <button id="vb-next">→</button>
+        </nav>
+      </div>
+    </div>
+
+    <!-- ── TAB: MEETING SCRIPT ── -->
+    <div class="tab-panel" id="tab-ms">
+      <div class="placeholder-wrap">
+        <div class="placeholder-card">
+          <div class="placeholder-icon">📋</div>
+          <div class="placeholder-badge">● Hamarosan</div>
+          <div class="placeholder-title">Meeting Script</div>
+          <p class="placeholder-desc">A sales meeting folyamatát vezető szkript — az első kapcsolatfelvételtől a lezárásig. Fázisokra bontva, ellenvetés-kezeléssel.</p>
+          <div class="placeholder-divider"></div>
+          <div class="placeholder-items">
+            <div class="placeholder-item">
+              <div class="placeholder-item-icon">🤝</div>
+              <div>
+                <div class="placeholder-item-title">Kapcsolatfelvétel & rapport</div>
+                <div class="placeholder-item-desc">Hogyan nyitjuk meg a meetinget, mi az első 2 perc célja</div>
+              </div>
+            </div>
+            <div class="placeholder-item">
+              <div class="placeholder-item-icon">🔍</div>
+              <div>
+                <div class="placeholder-item-title">Diagnózis kérdések</div>
+                <div class="placeholder-item-desc">Fájdalompontok feltérképezése — mit keres valójában az ügyfél</div>
+              </div>
+            </div>
+            <div class="placeholder-item">
+              <div class="placeholder-item-icon">🎯</div>
+              <div>
+                <div class="placeholder-item-title">Ajánlat & értékprezentáció</div>
+                <div class="placeholder-item-desc">A CoreMarketing rendszer bemutatása az ő problémájára szabva</div>
+              </div>
+            </div>
+            <div class="placeholder-item">
+              <div class="placeholder-item-icon">💼</div>
+              <div>
+                <div class="placeholder-item-title">Ellenvetéskezelés & lezárás</div>
+                <div class="placeholder-item-desc">Leggyakoribb kifogások + bevált válaszok, következő lépés meghatározása</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB: COLD CALL SCRIPT ── -->
+    <div class="tab-panel" id="tab-cc">
+      <div class="placeholder-wrap">
+        <div class="placeholder-card">
+          <div class="placeholder-icon">📞</div>
+          <div class="placeholder-badge">● Feltöltés folyamatban</div>
+          <div class="placeholder-title">Cold Call Script</div>
+          <p class="placeholder-desc">Hideg megkeresések szkriptje — hogyan nyitunk ismeretlen vállalkozókkal, és hogyan jutunk el a meetingig 90 másodperc alatt.</p>
+          <div class="placeholder-divider"></div>
+          <div class="placeholder-items">
+            <div class="placeholder-item">
+              <div class="placeholder-item-icon">⚡</div>
+              <div>
+                <div class="placeholder-item-title">Az első 10 másodperc</div>
+                <div class="placeholder-item-desc">Pattern interrupt — hogyan kerüljük el a reflexszerű "nem érdekel"-t</div>
+              </div>
+            </div>
+            <div class="placeholder-item">
+              <div class="placeholder-item-icon">🎣</div>
+              <div>
+                <div class="placeholder-item-title">Hook & permission</div>
+                <div class="placeholder-item-desc">Érdeklődés felkeltése + engedélykérés a folytatáshoz</div>
+              </div>
+            </div>
+            <div class="placeholder-item">
+              <div class="placeholder-item-icon">📅</div>
+              <div>
+                <div class="placeholder-item-title">Meeting booking</div>
+                <div class="placeholder-item-desc">Időpont egyeztetés — 2 opciós technika a magas konverzióhoz</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+/* ══════════════════════════
+   AUTH
+══════════════════════════ */
+const USERS = {
+  coreadmin: { password: "kukac2005", role: "admin" },
+  coreuser:  { password: "coreuser2026", role: "user" },
+};
+const SESSION_KEY = "cm_hub_auth";
+
+function doLogin() {
+  const un = document.getElementById("username").value.trim().toLowerCase();
+  const pw = document.getElementById("password").value;
+  const user = USERS[un];
+  const errEl = document.getElementById("login-error");
+  const inputs = document.querySelectorAll(".login-input");
+
+  if (user && pw === user.password) {
+    sessionStorage.setItem(SESSION_KEY, user.role);
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    initVisionBoard();
+  } else {
+    inputs.forEach(i => i.classList.add("error"));
+    errEl.classList.add("show");
+    setTimeout(() => {
+      inputs.forEach(i => i.classList.remove("error"));
+      errEl.classList.remove("show");
+    }, 1500);
+  }
+}
+
+function doLogout() {
+  sessionStorage.removeItem(SESSION_KEY);
+  document.getElementById("app").style.display = "none";
+  document.getElementById("login-screen").style.display = "flex";
+  document.getElementById("username").value = "";
+  document.getElementById("password").value = "";
+}
+
+// Check existing session
+if (sessionStorage.getItem(SESSION_KEY)) {
+  document.getElementById("login-screen").style.display = "none";
+  document.getElementById("app").style.display = "block";
+  initVisionBoard();
+}
+
+document.getElementById("username").addEventListener("keydown", e => { if(e.key === "Enter") document.getElementById("password").focus(); });
+document.getElementById("password").addEventListener("keydown", e => { if(e.key === "Enter") doLogin(); });
+
+/* ══════════════════════════
+   TAB SWITCHING
+══════════════════════════ */
+function switchTab(tab) {
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+  document.getElementById("tab-" + tab).classList.add("active");
+  document.getElementById("nav-" + tab).classList.add("active");
+
+  // Show/hide vision board nav
+  const vbNav = document.getElementById("vb-nav");
+  const vbProg = document.getElementById("vb-progress");
+  if (vbNav) vbNav.style.display = tab === "vb" ? "flex" : "none";
+  if (vbProg) vbProg.style.display = tab === "vb" ? "block" : "none";
+
+  if (window.innerWidth <= 768) {
+    document.getElementById("sidebar").classList.remove("open");
+  }
+}
+
+/* ══════════════════════════
+   SIDEBAR MOBILE
+══════════════════════════ */
+function toggleSidebar() {
+  document.getElementById("sidebar").classList.toggle("open");
+}
+
+/* ══════════════════════════
+   VISION BOARD SLIDES
+══════════════════════════ */
+let vbCurrent = 0;
+let vbSlides = [];
+let vbInited = false;
+
+function initVisionBoard() {
+  if (vbInited) return;
+  vbInited = true;
+
+  vbSlides = Array.from(document.querySelectorAll("#vb-root .slide"));
+  const total = vbSlides.length;
+
+  // Build dots
+  const dotsEl = document.getElementById("vb-dots");
+  vbSlides.forEach((_, i) => {
+    const d = document.createElement("button");
+    d.className = "vb-nav-dot" + (i === 0 ? " active" : "");
+    d.onclick = () => vbGoTo(i);
+    dotsEl.appendChild(d);
+  });
+
+  document.getElementById("vb-prev").onclick = () => vbGoTo(vbCurrent - 1);
+  document.getElementById("vb-next").onclick = () => vbGoTo(vbCurrent + 1);
+
+  vbUpdateUI();
+
+  // Keyboard (only when vision board tab active)
+  document.addEventListener("keydown", e => {
+    if (!document.getElementById("tab-vb").classList.contains("active")) return;
+    if (e.key === "ArrowRight" || e.key === " ") { e.preventDefault(); vbGoTo(vbCurrent + 1); }
+    if (e.key === "ArrowLeft") { e.preventDefault(); vbGoTo(vbCurrent - 1); }
+  });
+
+  // Touch
+  let tx = 0;
+  document.getElementById("vb-root").addEventListener("touchstart", e => tx = e.touches[0].clientX);
+  document.getElementById("vb-root").addEventListener("touchend", e => {
+    const dx = tx - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 50) vbGoTo(vbCurrent + (dx > 0 ? 1 : -1));
+  });
+
+  // Editable fields
+  vbMakeEditable("vb-price-display",      "vb-price-input",       v => v.toLocaleString("hu-HU"), "block");
+  vbMakeEditable("vb-guar-budget-display","vb-guar-budget-input", v => v.toLocaleString("hu-HU"), "inline-block");
+  vbMakeEditable("vb-guar-leads-display", "vb-guar-leads-input",  v => v, "inline-block");
+  vbMakeEditable("vb-guar-cpr-display",   "vb-guar-cpr-input",    v => v.toLocaleString("hu-HU"), "inline-block");
+}
+
+function vbGoTo(idx) {
+  if (idx < 0 || idx >= vbSlides.length) return;
+  vbSlides[vbCurrent].classList.remove("active");
+  vbSlides[vbCurrent].classList.add("exit");
+  setTimeout(() => vbSlides[vbCurrent] && vbSlides[vbCurrent].classList.remove("exit"), 500);
+  vbCurrent = idx;
+  vbSlides[vbCurrent].classList.add("active");
+  vbSlides[vbCurrent].scrollTop = 0;
+  vbUpdateUI();
+}
+
+function vbUpdateUI() {
+  const total = vbSlides.length;
+  document.querySelectorAll(".vb-nav-dot").forEach((d, i) => d.classList.toggle("active", i === vbCurrent));
+  document.getElementById("vb-counter").textContent = `${vbCurrent + 1} / ${total}`;
+  const pct = ((vbCurrent + 1) / total) * 100;
+  const prog = document.getElementById("vb-progress");
+  const sidebar = document.querySelector(".sidebar");
+  const sidebarW = sidebar ? sidebar.offsetWidth : 240;
+  prog.style.left = sidebarW + "px";
+  prog.style.width = `calc(${pct}% * (100% - ${sidebarW}px) / 100)`;
+}
+
+function vbMakeEditable(displayId, inputId, formatter, showAs) {
+  const disp = document.getElementById(displayId);
+  const inp  = document.getElementById(inputId);
+  if (!disp || !inp) return;
+  disp.addEventListener("click", () => {
+    disp.style.display = "none";
+    inp.style.display  = showAs;
+    inp.focus(); inp.select();
+  });
+  function commit() {
+    const val = parseInt(inp.value) || 0;
+    disp.textContent   = formatter(val);
+    disp.style.display = showAs === "block" ? "block" : "inline";
+    inp.style.display  = "none";
+  }
+  inp.addEventListener("blur", commit);
+  inp.addEventListener("keydown", e => { if(e.key === "Enter") commit(); });
+}
+</script>
+
+</body>
+</html>
