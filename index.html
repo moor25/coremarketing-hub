@@ -374,11 +374,6 @@ body.present-mode .present-btn { display: none; }
         <span class="nav-item-icon">📊</span>
         Vision Board
       </button>
-      <button class="nav-item admin-only" onclick="switchTab('ms')" id="nav-ms">
-        <span class="nav-item-icon">📋</span>
-        Meeting Script
-        <span class="nav-badge">HAMAROSAN</span>
-      </button>
       <button class="nav-item" onclick="switchTab('cc')" id="nav-cc">
         <span class="nav-item-icon">📞</span>
         Cold Call Script
@@ -717,49 +712,6 @@ body.present-mode .present-btn { display: none; }
       </div>
     </div>
 
-    <!-- ── TAB: MEETING SCRIPT ── -->
-    <div class="tab-panel" id="tab-ms">
-      <div class="placeholder-wrap">
-        <div class="placeholder-card">
-          <div class="placeholder-icon">📋</div>
-          <div class="placeholder-badge">● Hamarosan</div>
-          <div class="placeholder-title">Meeting Script</div>
-          <p class="placeholder-desc">A sales meeting folyamatát vezető szkript — az első kapcsolatfelvételtől a lezárásig. Fázisokra bontva, ellenvetés-kezeléssel.</p>
-          <div class="placeholder-divider"></div>
-          <div class="placeholder-items">
-            <div class="placeholder-item">
-              <div class="placeholder-item-icon">🤝</div>
-              <div>
-                <div class="placeholder-item-title">Kapcsolatfelvétel & rapport</div>
-                <div class="placeholder-item-desc">Hogyan nyitjuk meg a meetinget, mi az első 2 perc célja</div>
-              </div>
-            </div>
-            <div class="placeholder-item">
-              <div class="placeholder-item-icon">🔍</div>
-              <div>
-                <div class="placeholder-item-title">Diagnózis kérdések</div>
-                <div class="placeholder-item-desc">Fájdalompontok feltérképezése — mit keres valójában az ügyfél</div>
-              </div>
-            </div>
-            <div class="placeholder-item">
-              <div class="placeholder-item-icon">🎯</div>
-              <div>
-                <div class="placeholder-item-title">Ajánlat & értékprezentáció</div>
-                <div class="placeholder-item-desc">A CoreMarketing rendszer bemutatása az ő problémájára szabva</div>
-              </div>
-            </div>
-            <div class="placeholder-item">
-              <div class="placeholder-item-icon">💼</div>
-              <div>
-                <div class="placeholder-item-title">Ellenvetéskezelés & lezárás</div>
-                <div class="placeholder-item-desc">Leggyakoribb kifogások + bevált válaszok, következő lépés meghatározása</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- ── TAB: COLD CALL SCRIPT ── -->
     <div class="tab-panel" id="tab-cc">
       <div class="placeholder-wrap">
@@ -874,7 +826,7 @@ function exitPresent() {
 // Prezentáció gomb csak VB és MS tabokon látható
 function updatePresentBtn(tab) {
   const btn = document.getElementById("present-btn");
-  if (btn) btn.style.display = (tab === "vb" || tab === "ms") ? "" : "none";
+  if (btn) btn.style.display = tab === "vb" ? "" : "none";
 }
 
 // Check existing session
