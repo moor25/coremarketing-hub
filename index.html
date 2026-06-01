@@ -714,37 +714,170 @@ body.present-mode .present-btn { display: none; }
 
     <!-- ── TAB: COLD CALL SCRIPT ── -->
     <div class="tab-panel" id="tab-cc">
-      <div class="placeholder-wrap">
-        <div class="placeholder-card">
-          <div class="placeholder-icon">📞</div>
-          <div class="placeholder-badge">● Feltöltés folyamatban</div>
-          <div class="placeholder-title">Cold Call Script</div>
-          <p class="placeholder-desc">Hideg megkeresések szkriptje — hogyan nyitunk ismeretlen vállalkozókkal, és hogyan jutunk el a meetingig 90 másodperc alatt.</p>
-          <div class="placeholder-divider"></div>
-          <div class="placeholder-items">
-            <div class="placeholder-item">
-              <div class="placeholder-item-icon">⚡</div>
-              <div>
-                <div class="placeholder-item-title">Az első 10 másodperc</div>
-                <div class="placeholder-item-desc">Pattern interrupt — hogyan kerüljük el a reflexszerű "nem érdekel"-t</div>
-              </div>
+      <div style="max-width:780px; margin:0 auto; padding:48px 32px 80px; font-family:'DM Sans',sans-serif;">
+
+        <!-- Header -->
+        <div style="margin-bottom:36px;">
+          <div style="font-family:'Syne',sans-serif; font-size:11px; letter-spacing:3px; color:#4f8ef7; text-transform:uppercase; margin-bottom:12px;">Cold Call Script</div>
+          <h2 style="font-family:'Syne',sans-serif; font-size:clamp(24px,3vw,36px); font-weight:800; color:#f1f5f9; margin:0 0 10px; line-height:1.15;">Hideghívás → Meeting</h2>
+          <p style="font-size:14px; color:#64748b; margin:0;">Kövesd a lépéseket sorban. A <span style="color:#f1f5f9; font-weight:500;">kiemelt szövegek</span> a kulcsmondatok.</p>
+        </div>
+
+        <!-- SCRIPT STEPS -->
+        <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:40px;">
+
+          <!-- 1. Nyitás -->
+          <div style="background:#0d1120; border:1px solid rgba(255,255,255,0.07); border-left:3px solid #4f8ef7; border-radius:0 14px 14px 0; padding:20px 24px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+              <span style="font-family:'Syne',sans-serif; font-size:10px; font-weight:700; letter-spacing:2px; color:#4f8ef7; text-transform:uppercase;">01 · Nyitás</span>
+              <span style="font-size:11px; color:#475569; background:#111827; border:1px solid rgba(255,255,255,0.05); padding:2px 8px; border-radius:20px;">~10 mp</span>
             </div>
-            <div class="placeholder-item">
-              <div class="placeholder-item-icon">🎣</div>
-              <div>
-                <div class="placeholder-item-title">Hook & permission</div>
-                <div class="placeholder-item-desc">Érdeklődés felkeltése + engedélykérés a folytatáshoz</div>
-              </div>
+            <p style="font-size:15px; color:#cbd5e1; line-height:1.8; margin:0;">
+              Szép napot! <span style="color:#f1f5f9; font-weight:500;">(NÉV)</span> vagyok és azt szeretném megkérdezni, hogy
+              <span style="color:#f1f5f9; font-weight:500;">(XY MUNKA)</span>-val kapcsolatban jó számot keresek?
+            </p>
+          </div>
+
+          <!-- Válasz: Igen -->
+          <div style="background:#0d1120; border:1px solid rgba(34,211,168,0.15); border-left:3px solid #22d3a8; border-radius:0 14px 14px 0; padding:20px 24px;">
+            <div style="margin-bottom:12px;">
+              <span style="font-family:'Syne',sans-serif; font-size:10px; font-weight:700; letter-spacing:2px; color:#22d3a8; text-transform:uppercase;">✓ Igen esetén</span>
             </div>
-            <div class="placeholder-item">
-              <div class="placeholder-item-icon">📅</div>
-              <div>
-                <div class="placeholder-item-title">Meeting booking</div>
-                <div class="placeholder-item-desc">Időpont egyeztetés — 2 opciós technika a magas konverzióhoz</div>
-              </div>
+            <p style="font-size:15px; color:#cbd5e1; line-height:1.8; margin:0;">
+              <span style="color:#22d3a8; font-weight:600;">Nagyszerű!</span>
+            </p>
+          </div>
+
+          <!-- 2. Pattern interrupt -->
+          <div style="background:#0d1120; border:1px solid rgba(255,255,255,0.07); border-left:3px solid #a78bfa; border-radius:0 14px 14px 0; padding:20px 24px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+              <span style="font-family:'Syne',sans-serif; font-size:10px; font-weight:700; letter-spacing:2px; color:#a78bfa; text-transform:uppercase;">02 · Pattern Interrupt</span>
+              <span style="font-size:11px; color:#475569; background:#111827; border:1px solid rgba(255,255,255,0.05); padding:2px 8px; border-radius:20px;">⏱ 30 mp indítása</span>
+            </div>
+            <p style="font-size:15px; color:#cbd5e1; line-height:1.8; margin:0;">
+              Őszintén ez egy hideghívás, ügyfélszerzéssel kapcsolatban, <span style="color:#f1f5f9; font-weight:500;">ha gondolja, leteheti a telefont</span>, de ha ad nekem 30 másodpercet, elmondom, miért nem a szokásos marketinges üres ígéretekkel rabolom az idejét.
+            </p>
+            <div style="margin-top:14px; padding:10px 14px; background:rgba(167,139,250,0.07); border-radius:8px; border:1px solid rgba(167,139,250,0.15);">
+              <p style="font-size:13px; color:#a78bfa; margin:0; font-style:italic;">→ Érdekes lehet ez számára?</p>
             </div>
           </div>
+
+          <!-- Válasz: Igen -->
+          <div style="background:#0d1120; border:1px solid rgba(34,211,168,0.15); border-left:3px solid #22d3a8; border-radius:0 14px 14px 0; padding:20px 24px;">
+            <div style="margin-bottom:12px;">
+              <span style="font-family:'Syne',sans-serif; font-size:10px; font-weight:700; letter-spacing:2px; color:#22d3a8; text-transform:uppercase;">✓ Igen esetén</span>
+            </div>
+            <p style="font-size:15px; color:#cbd5e1; line-height:1.8; margin:0;">
+              <span style="color:#22d3a8; font-weight:600;">Szuper! Nagyon köszönöm!</span>
+            </p>
+          </div>
+
+          <!-- 3. Problem agitation -->
+          <div style="background:#0d1120; border:1px solid rgba(255,255,255,0.07); border-left:3px solid #f97316; border-radius:0 14px 14px 0; padding:20px 24px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+              <span style="font-family:'Syne',sans-serif; font-size:10px; font-weight:700; letter-spacing:2px; color:#f97316; text-transform:uppercase;">03 · Problem + Megoldás</span>
+            </div>
+            <p style="font-size:15px; color:#cbd5e1; line-height:1.8; margin:0;">
+              Nem tudom, hogy tapasztalta-e, vagy volt-e már marketingese, de <span style="color:#f1f5f9; font-weight:500;">a legtöbb ügynökség a kivitelezők pénzén kísérletezik a Facebookon</span>, reménykedve, hogy majd beesik egy-két érdeklődő.
+              <br><br>
+              <span style="color:#4f8ef7; font-weight:600;">Mi ezt máshogy csináljuk.</span>
+              <br><br>
+              Mielőtt egyetlen forintot is elköltenénk a hirdetésére, egy <span style="color:#f1f5f9; font-weight:500;">neuromarketing AI szoftverrel lefuttatjuk és leteszteljük a hirdetési képeket</span>. A rendszer egy agyi hőtérképpel pontosan megmutatja, hová néznek az emberek, meddig maradnak egy képen, és tetszik-e nekik.
+              <br><br>
+              Így <span style="color:#22d3a8; font-weight:500;">valós vásárlókat hoz be</span>, nem pedig olyanokat, akik csak az idejét húzzák.
+            </p>
+          </div>
+
+          <!-- 4. Lezárás + CTA -->
+          <div style="background:#0d1120; border:1px solid rgba(99,102,241,0.25); border-left:3px solid #6366f1; border-radius:0 14px 14px 0; padding:20px 24px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+              <span style="font-family:'Syne',sans-serif; font-size:10px; font-weight:700; letter-spacing:2px; color:#818cf8; text-transform:uppercase;">04 · Lezárás & Időpont</span>
+              <span style="font-size:11px; color:#475569; background:#111827; border:1px solid rgba(255,255,255,0.05); padding:2px 8px; border-radius:20px;">⏱ 30 mp lejárt</span>
+            </div>
+            <p style="font-size:15px; color:#cbd5e1; line-height:1.8; margin:0;">
+              De most nem is szeretnék eladni önnek semmit — és le is telt a 30 másodpercem.
+              <br><br>
+              Ha ez felkeltette az érdeklődését, akkor egy <span style="color:#f1f5f9; font-weight:500;">ingyenes 20 perces, teljesen díjmentes és kötelezettségmentes konzultációt</span> tudok felajánlani, ahol bemutatnám csapatunkat, és részletesen prezentálnám eddigi eredményeinket, és hogy ezeket hogyan érjük el.
+            </p>
+            <div style="margin-top:16px; padding:12px 16px; background:rgba(99,102,241,0.08); border-radius:10px; border:1px solid rgba(99,102,241,0.2);">
+              <p style="font-size:14px; color:#818cf8; margin:0; font-weight:600;">→ A hét eleje vagy a hét vége esetleg megfelelne önnek?</p>
+            </div>
+          </div>
+
         </div>
+
+        <!-- KIFOGÁSKEZELÉS -->
+        <div>
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+            <h3 style="font-family:'Syne',sans-serif; font-size:18px; font-weight:700; color:#f1f5f9; margin:0;">Kifogáskezelés</h3>
+            <div style="flex:1; height:1px; background:rgba(255,255,255,0.07);"></div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:10px;">
+
+            <details style="background:#0d1120; border:1px solid rgba(255,255,255,0.07); border-radius:12px; overflow:hidden;">
+              <summary style="padding:16px 20px; cursor:pointer; font-size:14px; font-weight:600; color:#e2e8f0; list-style:none; display:flex; justify-content:space-between; align-items:center;">
+                <span>😐 "Nem érdekel"</span>
+                <span style="color:#475569; font-size:18px; font-weight:300;">+</span>
+              </summary>
+              <div style="padding:0 20px 18px; border-top:1px solid rgba(255,255,255,0.05);">
+                <p style="font-size:14px; color:#94a3b8; line-height:1.7; margin:14px 0 0;">Teljesen érthető — nem is várom el, hogy most rögtön döntsön. Egyetlen dolgot szeretnék megmutatni: hogyan dolgozunk másképp, mint a többi ügynökség. Ez mindössze 20 perc, és ha nem éri meg, legalább kap egy másik perspektívát a marketingjéhez. <span style="color:#f1f5f9; font-weight:500;">Mikor lenne önnek 20 perce erre a héten?</span></p>
+              </div>
+            </details>
+
+            <details style="background:#0d1120; border:1px solid rgba(255,255,255,0.07); border-radius:12px; overflow:hidden;">
+              <summary style="padding:16px 20px; cursor:pointer; font-size:14px; font-weight:600; color:#e2e8f0; list-style:none; display:flex; justify-content:space-between; align-items:center;">
+                <span>🏢 "Van már marketingesünk"</span>
+                <span style="color:#475569; font-size:18px; font-weight:300;">+</span>
+              </summary>
+              <div style="padding:0 20px 18px; border-top:1px solid rgba(255,255,255,0.05);">
+                <p style="font-size:14px; color:#94a3b8; line-height:1.7; margin:14px 0 0;">Örülök, hogy komolyan veszi a marketinget. Nem is akarjuk felváltani — egyszerűen megmutatnánk, hogy az AI-alapú hirdetés-validációval hogyan lehetne hatékonyabbá tenni azt, amit már csinálnak. <span style="color:#f1f5f9; font-weight:500;">Megér 20 percet egy második vélemény?</span></p>
+              </div>
+            </details>
+
+            <details style="background:#0d1120; border:1px solid rgba(255,255,255,0.07); border-radius:12px; overflow:hidden;">
+              <summary style="padding:16px 20px; cursor:pointer; font-size:14px; font-weight:600; color:#e2e8f0; list-style:none; display:flex; justify-content:space-between; align-items:center;">
+                <span>💸 "Biztosan drága"</span>
+                <span style="color:#475569; font-size:18px; font-weight:300;">+</span>
+              </summary>
+              <div style="padding:0 20px 18px; border-top:1px solid rgba(255,255,255,0.05);">
+                <p style="font-size:14px; color:#94a3b8; line-height:1.7; margin:14px 0 0;">Értem, és ez egy jogos kérdés. Pont ezért ajánlom a konzultációt — ott konkrét számokat mutatunk, és ha nem éri meg, egyszerűen nem dolgozunk együtt. Az biztos, hogy <span style="color:#f1f5f9; font-weight:500;">drágább a rossz marketing, mint a jó.</span> <span style="color:#f1f5f9; font-weight:500;">Mikor nézne bele 20 percet?</span></p>
+              </div>
+            </details>
+
+            <details style="background:#0d1120; border:1px solid rgba(255,255,255,0.07); border-radius:12px; overflow:hidden;">
+              <summary style="padding:16px 20px; cursor:pointer; font-size:14px; font-weight:600; color:#e2e8f0; list-style:none; display:flex; justify-content:space-between; align-items:center;">
+                <span>📧 "Küldjön emailt"</span>
+                <span style="color:#475569; font-size:18px; font-weight:300;">+</span>
+              </summary>
+              <div style="padding:0 20px 18px; border-top:1px solid rgba(255,255,255,0.05);">
+                <p style="font-size:14px; color:#94a3b8; line-height:1.7; margin:14px 0 0;">Persze, szívesen. De tapasztalatból mondom, hogy egy email nem tudja megmutatni azt, amit 20 perc személyesen igen — főleg a konkrét eredményeket és az agyi hőtérkép rendszert. <span style="color:#f1f5f9; font-weight:500;">Ha adja meg az email-jét, szívesen küldök — de emellett egy gyors 20 perces hívást is be tudnánk ütemezni?</span></p>
+              </div>
+            </details>
+
+            <details style="background:#0d1120; border:1px solid rgba(255,255,255,0.07); border-radius:12px; overflow:hidden;">
+              <summary style="padding:16px 20px; cursor:pointer; font-size:14px; font-weight:600; color:#e2e8f0; list-style:none; display:flex; justify-content:space-between; align-items:center;">
+                <span>⏰ "Most nincs időm / Majd visszahívom"</span>
+                <span style="color:#475569; font-size:18px; font-weight:300;">+</span>
+              </summary>
+              <div style="padding:0 20px 18px; border-top:1px solid rgba(255,255,255,0.05);">
+                <p style="font-size:14px; color:#94a3b8; line-height:1.7; margin:14px 0 0;">Természetesen, megértem. Nem akarom feleslegesen foglalni az idejét. <span style="color:#f1f5f9; font-weight:500;">Mikor lenne megfelelőbb — inkább hétfőn délelőtt vagy inkább a hét végén?</span> Ütemezem be, és nem kell emlékeznie rá — küldök visszaigazolást.</p>
+              </div>
+            </details>
+
+            <details style="background:#0d1120; border:1px solid rgba(255,255,255,0.07); border-radius:12px; overflow:hidden;">
+              <summary style="padding:16px 20px; cursor:pointer; font-size:14px; font-weight:600; color:#e2e8f0; list-style:none; display:flex; justify-content:space-between; align-items:center;">
+                <span>🤔 "Már próbáltam Facebookot, nem működött"</span>
+                <span style="color:#475569; font-size:18px; font-weight:300;">+</span>
+              </summary>
+              <div style="padding:0 20px 18px; border-top:1px solid rgba(255,255,255,0.05);">
+                <p style="font-size:14px; color:#94a3b8; line-height:1.7; margin:14px 0 0;">Ezt hallom a legtöbbször — és pontosan ezért dolgoztuk ki ezt a rendszert. A legtöbb Facebook kampány azért bukik el, mert <span style="color:#f1f5f9; font-weight:500;">nem tesztelik előre a kreatívokat</span>. Nálunk az AI megmondja a futtatás előtt, melyik kép működik — így nem kell a saját pénzén kipróbálni. <span style="color:#f1f5f9; font-weight:500;">Megmutatnám konkrétan, hogyan — mikor lenne 20 perce?</span></p>
+              </div>
+            </details>
+
+          </div>
+        </div>
+
       </div>
     </div>
 
