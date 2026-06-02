@@ -400,8 +400,6 @@ body.present-mode .present-btn { display: none; }
     <!-- ── TAB: VISION BOARD ── -->
     <div class="tab-panel active" id="tab-vb">
       <div id="vb-root">
-        <!-- Progress bar (vision board only) -->
-        <div class="vb-progress" id="vb-progress"></div>
 
         <!-- SLIDE 1 – A rendszer -->
         <div class="slide active" id="vb-s2">
@@ -701,13 +699,6 @@ body.present-mode .present-btn { display: none; }
           </div>
         </div>
 
-        <!-- Vision Board NAV -->
-        <nav id="vb-nav">
-          <button id="vb-prev">←</button>
-          <div class="vb-nav-dots" id="vb-dots"></div>
-          <div class="vb-counter" id="vb-counter">1 / 6</div>
-          <button id="vb-next">→</button>
-        </nav>
       </div>
     </div>
 
@@ -886,6 +877,16 @@ body.present-mode .present-btn { display: none; }
     </div>
 
   </div><!-- /main -->
+
+  <!-- Vision Board: progress bar + nav (fixed overlays, outside vb-root) -->
+  <div class="vb-progress" id="vb-progress"></div>
+  <nav id="vb-nav" style="display:none;">
+    <button id="vb-prev">←</button>
+    <div class="vb-nav-dots" id="vb-dots"></div>
+    <div class="vb-counter" id="vb-counter">1 / 6</div>
+    <button id="vb-next">→</button>
+  </nav>
+
 </div><!-- /app -->
 
 <script>
