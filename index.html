@@ -158,17 +158,14 @@ body { font-family: 'DM Sans', sans-serif; background: #0c0c14; color: #e2e8f0; 
   font-family: 'DM Sans', sans-serif; color: var(--text);
 }
 #vb-root .slide {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.5s ease, transform 0.5s ease;
-  transform: translateX(40px);
+  display: none;
+  flex-direction: column;
   overflow-y: auto;
+  min-height: 100%;
 }
 #vb-root .slide.active {
-  opacity: 1; pointer-events: all; transform: translateX(0);
+  display: flex;
 }
-#vb-root .slide.exit { opacity: 0; transform: translateX(-40px); }
 
 #vb-nav {
   position: fixed; bottom: 32px; left: calc(240px + 50%);
@@ -881,10 +878,10 @@ body.present-mode .present-btn { display: none; }
   <!-- Vision Board: progress bar + nav (fixed overlays, outside vb-root) -->
   <div class="vb-progress" id="vb-progress"></div>
   <nav id="vb-nav" style="display:none;">
-    <button id="vb-prev">←</button>
+    <button id="vb-prev" onclick="vbGoTo(vbCurrent-1)">←</button>
     <div class="vb-nav-dots" id="vb-dots"></div>
     <div class="vb-counter" id="vb-counter">1 / 6</div>
-    <button id="vb-next">→</button>
+    <button id="vb-next" onclick="vbGoTo(vbCurrent+1)">→</button>
   </nav>
 
 </div><!-- /app -->
@@ -1066,8 +1063,6 @@ function initVisionBoard() {
 function vbGoTo(idx) {
   if (idx < 0 || idx >= vbSlides.length) return;
   vbSlides[vbCurrent].classList.remove("active");
-  vbSlides[vbCurrent].classList.add("exit");
-  setTimeout(() => vbSlides[vbCurrent] && vbSlides[vbCurrent].classList.remove("exit"), 500);
   vbCurrent = idx;
   vbSlides[vbCurrent].classList.add("active");
   vbSlides[vbCurrent].scrollTop = 0;
