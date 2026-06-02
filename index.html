@@ -158,19 +158,27 @@ body { font-family: 'DM Sans', sans-serif; background: #0c0c14; color: #e2e8f0; 
   font-family: 'DM Sans', sans-serif; color: var(--text);
 }
 #vb-root .slide {
+  position: absolute; inset: 0;
   display: none;
   flex-direction: column;
   overflow-y: auto;
-  min-height: 100%;
 }
 #vb-root .slide.active {
+  display: flex;
+}
+
+/* Nav: alapból rejtett, csak ha body.tab-vb + body.role-admin */
+#vb-nav {
+  display: none;
+}
+body.role-admin.tab-vb #vb-nav {
   display: flex;
 }
 
 #vb-nav {
   position: fixed; bottom: 32px; left: calc(240px + 50%);
   transform: translateX(-50%);
-  z-index: 200; display: flex; align-items: center; gap: 12px;
+  z-index: 9999; align-items: center; gap: 12px;
   background: rgba(13,17,32,0.9); border: 1px solid rgba(255,255,255,0.07);
   border-radius: 50px; padding: 10px 20px;
   backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0,0,0,0.5);
@@ -192,9 +200,13 @@ body { font-family: 'DM Sans', sans-serif; background: #0c0c14; color: #e2e8f0; 
   color: var(--muted); letter-spacing: 2px; min-width: 40px; text-align: center;
 }
 .vb-progress {
+  display: none;
   position: fixed; top: 0; left: 240px; right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  background: linear-gradient(90deg, #4f8ef7, #a78bfa);
   transition: width 0.5s ease; z-index: 300; width: 0;
+}
+body.role-admin.tab-vb .vb-progress {
+  display: block;
 }
 
 /* Vision board content styles */
@@ -877,7 +889,7 @@ body.present-mode .present-btn { display: none; }
 
   <!-- Vision Board: progress bar + nav (fixed overlays, outside vb-root) -->
   <div class="vb-progress" id="vb-progress"></div>
-  <nav id="vb-nav" style="display:none;">
+  <nav id="vb-nav">
     <button id="vb-prev" onclick="vbGoTo(vbCurrent-1)">←</button>
     <div class="vb-nav-dots" id="vb-dots"></div>
     <div class="vb-counter" id="vb-counter">1 / 6</div>
@@ -979,11 +991,9 @@ function switchTab(tab) {
   document.getElementById("tab-" + tab).classList.add("active");
   document.getElementById("nav-" + tab).classList.add("active");
 
-  // Show/hide vision board nav
-  const vbNav = document.getElementById("vb-nav");
-  const vbProg = document.getElementById("vb-progress");
-  if (vbNav) vbNav.style.display = tab === "vb" ? "flex" : "none";
-  if (vbProg) vbProg.style.display = tab === "vb" ? "block" : "none";
+  // Tab body-osztály (CSS kezeli a nav láthatóságát)
+  document.body.classList.remove("tab-vb", "tab-cc", "tab-smma");
+  document.body.classList.add("tab-" + tab);
 
   // SMMA: localStorage-ba írjuk az auth-ot MIELŐTT az iframe betölt,
   // mert sessionStorage-t a React már olvasta a mount-kor
