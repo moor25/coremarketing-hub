@@ -890,10 +890,12 @@ body.present-mode .present-btn { display: none; }
   <!-- Vision Board: progress bar + nav (fixed overlays, outside vb-root) -->
   <div class="vb-progress" id="vb-progress"></div>
   <nav id="vb-nav">
-    <button id="vb-prev" onclick="vbGoTo(vbCurrent-1)">←</button>
+    <div style="display:flex; align-items:center; gap:16px;">
+      <button id="vb-prev" onclick="vbGoTo(vbCurrent-1)">←</button>
+      <div class="vb-counter" id="vb-counter">1 / 6</div>
+      <button id="vb-next" onclick="vbGoTo(vbCurrent+1)">→</button>
+    </div>
     <div class="vb-nav-dots" id="vb-dots"></div>
-    <div class="vb-counter" id="vb-counter">1 / 6</div>
-    <button id="vb-next" onclick="vbGoTo(vbCurrent+1)">→</button>
   </nav>
 
 </div><!-- /app -->
