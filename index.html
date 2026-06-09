@@ -1010,6 +1010,9 @@ function switchTab(tab) {
 
   updatePresentBtn(tab);
 
+  // VB esetén mindig biztosítjuk az inicializálást
+  if (tab === "vb") initVisionBoard();
+
   if (window.innerWidth <= 768) {
     document.getElementById("sidebar").classList.remove("open");
   }
@@ -1030,10 +1033,12 @@ let vbSlides = [];
 let vbInited = false;
 
 function initVisionBoard() {
-  if (vbInited) return;
+  // Ha már fut de a slides-lista valami miatt üres, próbálja újra
+  vbSlides = Array.from(document.querySelectorAll("#vb-root .slide"));
+  if (vbInited) { vbUpdateUI(); return; }
+  if (vbSlides.length === 0) return; // DOM még nem kész
   vbInited = true;
 
-  vbSlides = Array.from(document.querySelectorAll("#vb-root .slide"));
   const total = vbSlides.length;
 
   // Build dots
